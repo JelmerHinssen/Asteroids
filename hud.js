@@ -34,6 +34,7 @@ function Hud() {
       digitPos.x += size + padding;
     }
     drawLives();
+	drawMuteButton(20, 20);
     if(lives < 0) {
       push();
       textSize(32);
@@ -52,6 +53,39 @@ function Hud() {
       top.x -= 20 + padding;
     }
     pop();
+  }
+  
+  function drawMuteButton(x, y){
+	push();
+	translate(x, y);
+	strokeWeight(1);
+	stroke(255);
+	fill(255);
+	if(mouseX >= 20 && mouseX <= 60 && mouseY >= 20 && mouseY <= 40){
+	scale(0.6);
+	translate(-x*0.1, -y*0.1);
+	}else{
+		scale(0.5);
+	}
+	//noFill();
+	beginShape();
+	vertex(0, 10);
+	vertex(20, 10);
+	vertex(40, 0);
+	vertex(40, 40);
+	vertex(20, 30);
+	vertex(0, 30);
+	endShape(CLOSE);
+	strokeWeight(5);
+	//stroke(0, 255, 0);
+	noFill();
+	//ellipse(40, 20, 40, 40);
+	if(!muted){
+		arc(40, 20, 20, 20, 3.5 * HALF_PI, 4.5 * HALF_PI);
+		arc(40, 20, 40, 40, 3.5 * HALF_PI, 4.5 * HALF_PI);
+		arc(40, 20, 60, 60, 3.5 * HALF_PI, 4.5 * HALF_PI);
+	}
+	pop();
   }
 
   //draws the digit based on the digit map
@@ -93,5 +127,14 @@ function Hud() {
         console.log("line map is invalid");
         break;
     }
+  }
+  
+  this.click = function(x, y){
+	if(x >= 20 && x <= 60){
+		if(y >= 20 && y <= 40){
+			muted = !muted;
+			stopSounds();
+		}
+	}
   }
 }

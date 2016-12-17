@@ -22,9 +22,7 @@ function Laser(spos, angle) {
   }
 
   this.playSoundEffect = function(sound){
-    if (!sound.isPlaying()){
-      sound.play();
-    }
+      playSound(sound, true);
   }
 
   this.hits = function(asteroid) {

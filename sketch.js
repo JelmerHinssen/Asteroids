@@ -11,11 +11,12 @@ var laserSoundEffect;
 var explosionSoundEffects = [];
 var canPlay = true;
 var shieldTime = 180;
+var muted = false;
 
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
   for (var i =0; i < 3; i++){
-    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+    explosionSoundEffects[i] = loadSound('audio/explosion-' + i + '.mp3');
   }
 }
 var score = 0;
@@ -58,6 +59,7 @@ function draw() {
     for (var j = asteroids.length - 1; j >= 0; j--) {
       if (lasers[i].hits(asteroids[j])) {
         asteroids[j].playSoundEffect(explosionSoundEffects);
+		laserSoundEffect.stop();
         score += points[asteroids[j].size];
         var newAsteroids = asteroids[j].breakup();
         asteroids = asteroids.concat(newAsteroids);
@@ -112,4 +114,27 @@ function lineIntersect(l1v1, l1v2, l2v1, l2v2) {
   } else {
     return false;
   }
+}
+
+function playSound(sound, checkPlaying){
+	if(!muted){
+		if(Array.isArray(sound)){
+			playSound(sound[floor(random(0,sound.length))], checkPlaying);
+		}else{
+			if(!checkPlaying || !sound.isPlaying()){
+				sound.play();
+			}
+		}
+	}
+}
+
+function stopSounds(){
+	laserSoundEffect.stop();
+	for(var i = 0; i < explosionSoundEffects.length; i++){
+		explosionSoundEffects[i].stop();
+	}
+}
+
+function mouseClicked(){
+	hud.click(mouseX, mouseY);
 }
